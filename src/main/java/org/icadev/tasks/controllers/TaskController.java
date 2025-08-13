@@ -6,6 +6,7 @@ import org.icadev.tasks.services.TaskService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -31,5 +32,10 @@ public class TaskController {
     @PostMapping
     public TaskDto createTask(@PathVariable("task_list_id") UUID taskListId, @RequestBody TaskDto taskDto) {
         return taskMapper.toDto(taskService.createTask(taskListId, taskMapper.fromDto(taskDto)));
+    }
+
+    @GetMapping(path = "/{task_id}")
+    public Optional<TaskDto> getTask(@PathVariable("task_list_id") UUID taskListId, @PathVariable("task_id") UUID taskId) {
+        return taskService.getTask(taskListId, taskId).map(taskMapper::toDto);
     }
 }
