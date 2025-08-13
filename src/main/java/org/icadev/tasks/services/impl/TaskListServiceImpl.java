@@ -50,4 +50,23 @@ public class TaskListServiceImpl implements TaskListService {
     public Optional<TaskList> getTaskList(UUID taskListId) {
         return taskListRepository.findById(taskListId);
     }
+
+    @Override
+    public TaskList updateTaskList(UUID taskListId, TaskList taskList) {
+        if(taskList.getId() == null){
+            throw new IllegalArgumentException("Task List ID must be present!");
+        }
+
+        if(!taskListId.equals(taskList.getId())){
+            throw new IllegalArgumentException("Task List ID must match the one provided!");
+        }
+
+        TaskList existingTaskList = taskListRepository.findById(taskListId)
+                .orElseThrow(() -> new IllegalArgumentException("Task List not found!"));
+
+        existingTaskList.setTitle(taskList.getTitle());
+        existingTaskList.setDescription(taskList.getDescription());
+        existingTaskList.setUpdated(LocalDateTime.now());
+        return taskListRepository.save(existingTaskList);
+    }
 }
