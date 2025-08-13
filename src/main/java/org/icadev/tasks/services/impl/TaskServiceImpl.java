@@ -101,4 +101,11 @@ public class TaskServiceImpl implements TaskService {
 
         return taskRepository.save(existingTask);
     }
+
+    @Override
+    public void deleteTask(UUID taskListId, UUID taskId) {
+        taskRepository.findByTaskListIdAndId(taskListId, taskId)
+                .orElseThrow(() -> new IllegalArgumentException("Task not found!"));
+        taskRepository.deleteByTaskListIdAndId(taskListId, taskId);
+    }
 }

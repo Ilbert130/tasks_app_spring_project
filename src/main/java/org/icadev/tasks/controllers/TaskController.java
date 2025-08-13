@@ -1,5 +1,6 @@
 package org.icadev.tasks.controllers;
 
+import jakarta.transaction.Transactional;
 import org.icadev.tasks.domain.dto.TaskDto;
 import org.icadev.tasks.mappers.TaskMapper;
 import org.icadev.tasks.services.TaskService;
@@ -42,5 +43,11 @@ public class TaskController {
     @PutMapping(path = "/{task_id}")
     public TaskDto updateTask(@PathVariable("task_list_id") UUID taskListId, @PathVariable("task_id") UUID taskId, @RequestBody TaskDto taskDto) {
         return taskMapper.toDto(taskService.updateTask(taskListId, taskId, taskMapper.fromDto(taskDto)));
+    }
+
+    @DeleteMapping(path = "/{task_id}")
+    @Transactional
+    public void deleteTask(@PathVariable("task_list_id") UUID taskListId, @PathVariable("task_id") UUID taskId) {
+        taskService.deleteTask(taskListId, taskId);
     }
 }
